@@ -1,0 +1,11 @@
+.DS_Store
+backend/.venv/
+backend/data/
+backend/app/__pycache__/
+backend/app/**/*.pyc
+miniprogram/node_modules/
+miniprogram/miniprogram_npm/
+app/node_modules/
+app/.expo/
+app/dist/
+*.log

@@ -1,0 +1,53 @@
+<view wx:if="{{visible}}" class="overlay">
+  <view class="mask" bindtap="onClose"></view>
+  <view class="panel">
+    <view class="panel-header">
+      <view>
+        <view class="title">统一记录</view>
+        <view class="subtitle">饮食、运动、健康都可以自然表达</view>
+      </view>
+      <button class="close" bindtap="onClose">×</button>
+    </view>
+
+    <scroll-view class="messages" scroll-y>
+      <block wx:for="{{messages}}" wx:key="id">
+        <view class="message {{item.role}}">
+          <view class="avatar">{{item.role === 'assistant' ? '福' : '我'}}</view>
+          <view class="bubble">
+            <text>{{item.content}}</text>
+            <view wx:if="{{item.quick_actions && item.quick_actions.length}}" class="actions">
+              <button
+                wx:for="{{item.quick_actions}}"
+                wx:for-item="action"
+                wx:key="action"
+                size="mini"
+                data-action="{{action}}"
+                bindtap="quickAction"
+              >{{action}}</button>
+            </view>
+            <view class="time">{{item.time}}</view>
+          </view>
+        </view>
+      </block>
+      <view wx:if="{{isProcessing}}" class="thinking">AI正在分析...</view>
+    </scroll-view>
+
+    <view class="tips">
+      <button size="mini" data-text="我早餐吃了一个包子、一杯豆浆、一个鸡蛋" bindtap="useTip">我吃了...</button>
+      <button size="mini" data-text="我今天跑步5公里，用时30分钟" bindtap="useTip">我运动了...</button>
+      <button size="mini" data-text="我今天血压高压135，低压85，心率72" bindtap="useTip">我量了...</button>
+    </view>
+
+    <view wx:if="{{selectedImages.length}}" class="image-preview">
+      <image wx:for="{{selectedImages}}" wx:key="*this" src="{{item}}" mode="aspectFill"></image>
+    </view>
+
+    <view class="input-bar">
+      <button class="icon-button" bindtouchstart="startVoice">🎙</button>
+      <button class="icon-button" bindtap="chooseImage">📷</button>
+      <input value="{{inputText}}" bindinput="onInput" confirm-type="send" bindconfirm="sendMessage" placeholder="打字告诉来福..." />
+      <button class="send" bindtap="sendMessage" disabled="{{isProcessing}}">发送</button>
+    </view>
+  </view>
+</view>
+

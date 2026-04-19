@@ -1,0 +1,42 @@
+page {
+  background: #f5f5f5;
+  color: #212121;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+  font-size: 28rpx;
+}
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 32rpx;
+}
+
+.section-title {
+  margin: 40rpx 0 20rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.card {
+  border: 1rpx solid #e0e0e0;
+  border-radius: 16rpx;
+  background: #ffffff;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.primary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88rpx;
+  border-radius: 16rpx;
+  background: #4caf50;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.muted {
+  color: #757575;
+}
+

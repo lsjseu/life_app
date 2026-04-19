@@ -1,0 +1,64 @@
+<view class="page home">
+  <view class="hero card">
+    <view class="hello">早安，来福用户</view>
+    <view class="greeting">{{dashboard.greeting || '今天也和来福一起，好好照顾自己'}}</view>
+    <view class="score-row">
+      <view>
+        <view class="score">{{dashboard.stats.health_score || 82}}</view>
+        <view class="muted">健康评分</view>
+      </view>
+      <view class="streak">
+        <text>🔥</text>
+        <text>连续记录 {{dashboard.stats.record_days || 0}} 天</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="today-grid">
+    <view class="metric card" bindtap="goProfile">
+      <view class="metric-icon diet">🍽</view>
+      <view class="metric-value">{{dashboard.today.diet_calories || 0}}</view>
+      <view class="metric-label">摄入千卡</view>
+    </view>
+    <view class="metric card" bindtap="goProfile">
+      <view class="metric-icon sport">🏃</view>
+      <view class="metric-value">{{dashboard.today.exercise_calories || 0}}</view>
+      <view class="metric-label">消耗千卡</view>
+    </view>
+    <view class="metric card" bindtap="goProfile">
+      <view class="metric-icon health">💗</view>
+      <view class="metric-value">{{dashboard.today.health_count || 0}}</view>
+      <view class="metric-label">健康记录</view>
+    </view>
+  </view>
+
+  <button class="record-button" bindtap="openRecord">
+    <view class="record-icon">＋</view>
+    <view>记录</view>
+    <view class="record-desc">说话、打字、拍照都可以</view>
+  </button>
+
+  <view class="quick-row">
+    <button bindtap="goReport">查看报告</button>
+    <button bindtap="goAdvisor">问AI顾问</button>
+  </view>
+
+  <view class="section-title">最近记录</view>
+  <view wx:if="{{dashboard.recent_records.length}}" class="record-list">
+    <view wx:for="{{dashboard.recent_records}}" wx:key="id" class="record-item card">
+      <view class="record-type {{item.type}}">{{item.type === 'diet' ? '饮食' : item.type === 'exercise' ? '运动' : '健康'}}</view>
+      <view class="record-main">
+        <view class="record-title">{{item.title}}</view>
+        <view class="record-sub">{{item.ai_analysis.summary}}</view>
+      </view>
+      <view class="record-time">{{item.recorded_at}}</view>
+    </view>
+  </view>
+  <view wx:else class="empty card">
+    <view>还没有记录</view>
+    <button bindtap="openRecord">开始记录</button>
+  </view>
+</view>
+
+<record-overlay visible="{{recordVisible}}" bind:close="closeRecord" bind:saved="onRecordSaved" />
+

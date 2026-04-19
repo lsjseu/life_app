@@ -1,0 +1,69 @@
+<view class="page profile">
+  <view class="user-card card">
+    <view class="avatar">福</view>
+    <view class="user-main">
+      <view class="name">{{profile.nickname || '来福用户'}}</view>
+      <view class="muted">{{profile.age || 32}}岁 · {{profile.height || 170}}cm · {{profile.weight || 65}}kg</view>
+    </view>
+    <view class="edit">编辑</view>
+  </view>
+
+  <view class="streak card">
+    <view class="streak-item">
+      <view class="num">{{records.length}}</view>
+      <view class="muted">总记录</view>
+    </view>
+    <view class="streak-item">
+      <view class="num">{{profile.target_weight || 62}}</view>
+      <view class="muted">目标体重</view>
+    </view>
+    <view class="streak-item">
+      <view class="num">{{profile.activity_level || '轻度'}}</view>
+      <view class="muted">活动水平</view>
+    </view>
+  </view>
+
+  <view class="section-title">健康目标</view>
+  <view class="goals card">
+    <view wx:for="{{profile.health_goals}}" wx:key="*this" class="goal">✓ {{item}}</view>
+  </view>
+
+  <view class="section-title">档案管理</view>
+  <view class="manage-grid">
+    <view class="manage card">
+      <view class="manage-icon">🏥</view>
+      <view class="manage-title">病历</view>
+      <view class="muted">共 0 条记录</view>
+    </view>
+    <view class="manage card">
+      <view class="manage-icon">📊</view>
+      <view class="manage-title">体检报告</view>
+      <view class="muted">可上传分析</view>
+    </view>
+  </view>
+
+  <view class="section-title">我的记录</view>
+  <view class="filters card">
+    <button class="{{activeType === '' ? 'active' : ''}}" data-type="" bindtap="switchType">全部</button>
+    <button class="{{activeType === 'diet' ? 'active' : ''}}" data-type="diet" bindtap="switchType">饮食</button>
+    <button class="{{activeType === 'exercise' ? 'active' : ''}}" data-type="exercise" bindtap="switchType">运动</button>
+    <button class="{{activeType === 'health' ? 'active' : ''}}" data-type="health" bindtap="switchType">健康</button>
+  </view>
+
+  <view class="record-list">
+    <view wx:for="{{records}}" wx:key="id" class="record card">
+      <view class="record-top">
+        <view>
+          <view class="record-title">{{item.title}}</view>
+          <view class="muted">{{item.recorded_at}}</view>
+        </view>
+        <view class="tag {{item.type}}">{{item.type === 'diet' ? '饮食' : item.type === 'exercise' ? '运动' : '健康'}}</view>
+      </view>
+      <view class="analysis">{{item.ai_analysis.summary}}</view>
+      <view class="suggestion">{{item.ai_analysis.suggestion}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{!records.length && !loading}}" class="empty card">还没有记录</view>
+</view>
+

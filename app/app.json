@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "来福",
+    "slug": "life-native-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#F8FAFC"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.life.app"
+    },
+    "android": {
+      "package": "com.life.app"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

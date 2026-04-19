@@ -1,0 +1,134 @@
+.advisor {
+  padding-bottom: 0;
+}
+
+.switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 8rpx;
+}
+
+.switch button {
+  border-radius: 12rpx;
+  background: transparent;
+  color: #757575;
+}
+
+.switch button.active {
+  background: #4caf50;
+  color: #ffffff;
+}
+
+.chat-list {
+  height: calc(100vh - 260rpx);
+  margin-top: 24rpx;
+  padding-bottom: 24rpx;
+  box-sizing: border-box;
+}
+
+.message {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.message.user {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #4caf50;
+  color: #ffffff;
+  line-height: 56rpx;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.user .avatar {
+  background: #212121;
+}
+
+.bubble {
+  max-width: 76%;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+  line-height: 42rpx;
+  white-space: pre-wrap;
+}
+
+.user .bubble {
+  background: #4caf50;
+  color: #ffffff;
+}
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 16rpx;
+}
+
+.quick-actions button {
+  margin: 0;
+  color: #388e3c;
+  background: #e8f5e9;
+}
+
+.time {
+  margin-top: 8rpx;
+  color: #bdbdbd;
+  font-size: 20rpx;
+}
+
+.thinking {
+  margin-left: 72rpx;
+  color: #757575;
+}
+
+.input-bar {
+  display: flex;
+  gap: 12rpx;
+  padding: 16rpx 0;
+}
+
+.input-bar input {
+  flex: 1;
+  height: 80rpx;
+  padding: 0 24rpx;
+  border-radius: 40rpx;
+  background: #ffffff;
+}
+
+.input-bar button {
+  width: 112rpx;
+  border-radius: 40rpx;
+  background: #4caf50;
+  color: #ffffff;
+}
+
+.history {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin-top: 24rpx;
+}
+
+.session {
+  padding: 24rpx;
+}
+
+.session-title {
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.empty {
+  padding: 48rpx;
+  color: #757575;
+  text-align: center;
+}
+

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "来福",
+  "usingComponents": {
+    "record-overlay": "../../components/record-overlay/record-overlay"
+  }
+}
+

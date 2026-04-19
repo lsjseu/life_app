@@ -1,0 +1,49 @@
+<view class="page">
+  <view class="page-header">
+    <view class="title">健康报告</view>
+    <view class="subtitle">先看报告，再有针对性地问顾问</view>
+  </view>
+
+  <view class="type-switch card">
+    <button class="{{activeType === 'weekly' ? 'active' : ''}}" data-type="weekly" bindtap="switchType">周报</button>
+    <button class="{{activeType === 'monthly' ? 'active' : ''}}" data-type="monthly" bindtap="switchType">月报</button>
+  </view>
+
+  <button class="primary-button generate" bindtap="generateReport" loading="{{generating}}">
+    生成{{activeType === 'weekly' ? '周报' : '月报'}}
+  </button>
+
+  <view wx:if="{{reports.length}}" class="latest card">
+    <view class="latest-top">
+      <view>
+        <view class="report-title">{{reports[0].title}}</view>
+        <view class="muted">{{reports[0].period_start}} 至 {{reports[0].period_end}}</view>
+      </view>
+      <view class="score">{{reports[0].score}}</view>
+    </view>
+    <view class="summary">{{reports[0].summary}}</view>
+    <view class="sections">
+      <view wx:for="{{reports[0].content.sections}}" wx:key="title" class="section">
+        <view class="section-name">{{item.title}}</view>
+        <view wx:for="{{item.items}}" wx:for-item="line" wx:key="*this" class="section-line">• {{line}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-title">历史报告</view>
+  <view class="history">
+    <view wx:for="{{reports}}" wx:key="id" class="history-item card">
+      <view>
+        <view class="history-title">{{item.title}}</view>
+        <view class="muted">{{item.created_at}}</view>
+      </view>
+      <view class="mini-score">{{item.score}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{!reports.length && !loading}}" class="empty card">
+    <view>还没有健康报告</view>
+    <view class="muted">点击上方按钮生成第一份报告</view>
+  </view>
+</view>
+

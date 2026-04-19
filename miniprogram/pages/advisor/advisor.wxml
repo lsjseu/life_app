@@ -1,0 +1,39 @@
+<view class="page advisor">
+  <view class="switch card">
+    <button class="{{tab === 'chat' ? 'active' : ''}}" data-tab="chat" bindtap="switchTab">健康对话</button>
+    <button class="{{tab === 'history' ? 'active' : ''}}" data-tab="history" bindtap="switchTab">咨询记录</button>
+  </view>
+
+  <view wx:if="{{tab === 'chat'}}" class="chat">
+    <scroll-view class="chat-list" scroll-y>
+      <block wx:for="{{messages}}" wx:key="id">
+        <view class="message {{item.role}}">
+          <view class="avatar">{{item.role === 'assistant' ? '福' : '我'}}</view>
+          <view class="bubble">
+            <text>{{item.content}}</text>
+            <view wx:if="{{item.quick_actions && item.quick_actions.length}}" class="quick-actions">
+              <button wx:for="{{item.quick_actions}}" wx:for-item="quick" wx:key="quick" size="mini" data-text="{{quick}}" bindtap="useQuick">{{quick}}</button>
+            </view>
+            <view class="time">{{item.time}}</view>
+          </view>
+        </view>
+      </block>
+      <view wx:if="{{thinking}}" class="thinking">AI思考中...</view>
+    </scroll-view>
+    <view class="input-bar">
+      <input value="{{inputText}}" bindinput="onInput" bindconfirm="send" placeholder="问问你的健康问题..." />
+      <button bindtap="send">发送</button>
+    </view>
+  </view>
+
+  <view wx:else class="history">
+    <view wx:for="{{sessions}}" wx:key="id" class="session card" data-id="{{item.id}}" bindtap="openSession">
+      <view class="session-title">{{item.summary}}</view>
+      <view class="muted">{{item.updated_at}}</view>
+    </view>
+    <view wx:if="{{!sessions.length}}" class="empty card">
+      还没有咨询记录，开始问AI顾问吧！
+    </view>
+  </view>
+</view>
+

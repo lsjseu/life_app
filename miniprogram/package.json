@@ -1,0 +1,13 @@
+{
+  "name": "life-miniprogram",
+  "version": "1.0.0",
+  "description": "来福微信小程序 MVP",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "miniprogram-api-typings": "^4.0.7"
+  }
+}
+

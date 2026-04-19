@@ -1,0 +1,157 @@
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 28rpx;
+}
+
+.avatar {
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  background: #4caf50;
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: 700;
+  line-height: 104rpx;
+  text-align: center;
+}
+
+.user-main {
+  flex: 1;
+}
+
+.name {
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.edit {
+  color: #4caf50;
+}
+
+.streak {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 24rpx;
+  padding: 28rpx 0;
+}
+
+.streak-item {
+  text-align: center;
+}
+
+.num {
+  color: #4caf50;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.goals {
+  padding: 24rpx;
+}
+
+.goal {
+  padding: 10rpx 0;
+  color: #388e3c;
+}
+
+.manage-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+}
+
+.manage {
+  padding: 28rpx;
+}
+
+.manage-icon {
+  font-size: 44rpx;
+}
+
+.manage-title {
+  margin-top: 12rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 8rpx;
+  margin-bottom: 20rpx;
+}
+
+.filters button {
+  margin: 0;
+  border-radius: 12rpx;
+  background: transparent;
+  color: #757575;
+}
+
+.filters button.active {
+  background: #4caf50;
+  color: #ffffff;
+}
+
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.record {
+  padding: 24rpx;
+}
+
+.record-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.record-title {
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.tag {
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 22rpx;
+}
+
+.tag.diet {
+  background: #ff9800;
+}
+
+.tag.exercise {
+  background: #2196f3;
+}
+
+.tag.health {
+  background: #f44336;
+}
+
+.analysis {
+  margin-top: 20rpx;
+  line-height: 40rpx;
+}
+
+.suggestion {
+  margin-top: 12rpx;
+  padding: 18rpx;
+  border-radius: 12rpx;
+  background: #e8f5e9;
+  color: #388e3c;
+  line-height: 38rpx;
+}
+
+.empty {
+  padding: 48rpx;
+  color: #757575;
+  text-align: center;
+}
+
