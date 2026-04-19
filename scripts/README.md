@@ -11,7 +11,7 @@
 
 - `life_app.conf`
   - 脚本统一配置文件，格式是简单的 `KEY=VALUE`。
-  - 后端端口、Python、SQLite/MySQL 开关、MySQL 账号、日志目录等默认值都在这里维护。
+  - 后端端口、Python、SQLite/MySQL 开关、MySQL 账号、日志目录、通用 Agent LLM provider/model/base URL 等默认值都在这里维护。
   - 所有配置仍支持通过环境变量临时覆盖。
 
 - `load_life_app_config.sh`
@@ -49,3 +49,22 @@ MYSQL_ADMIN_PASSWORD='你的密码' \
 bash scripts/deploy_linux.sh
 ```
 
+## 通用 Agent LLM 配置
+
+通用 Agent 默认使用 DeepSeek：
+
+```conf
+GENERAL_AGENT_PROVIDER=deepseek
+GENERAL_AGENT_MODEL=deepseek-chat
+DEEP_THINK_LLM=deepseek-reasoner
+QUICK_THINK_LLM=deepseek-chat
+LLM_PROVIDER=deepseek
+LLM_BACKEND_URL=https://api.deepseek.com/v1
+LLM_API_KEY=
+```
+
+部署时可以直接传入密钥，不建议把真实 key 写进仓库：
+
+```bash
+LLM_API_KEY='你的 DeepSeek Key' bash scripts/deploy_linux.sh
+```
