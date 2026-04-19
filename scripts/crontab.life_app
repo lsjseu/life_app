@@ -1,0 +1,19 @@
+# Life App crontab 配置
+# 说明：时间按服务器本地时区执行，建议服务器时区设置为 Asia/Shanghai
+#
+# 安装方式示例：
+#   crontab scripts/crontab.life_app
+#
+# 日志位置：
+#   $APP_DIR/log/cron/
+
+SHELL=/bin/bash
+APP_DIR=/home/deploy/.local/share/life_app
+LOG_DIR=$APP_DIR/log/cron
+
+# 每天 02:20 主动调用一次首页接口，确认后端服务和数据库读链路可用。
+20 2 * * * cd $APP_DIR && mkdir -p $LOG_DIR && curl -fsS http://127.0.0.1:8000/api/v1/home/dashboard >> $LOG_DIR/health_check.log 2>&1
+
+# 每天 02:30 生成 demo 用户周报，便于验证报告链路。
+30 2 * * * cd $APP_DIR && mkdir -p $LOG_DIR && curl -fsS -X POST http://127.0.0.1:8000/api/v1/reports/generate -H 'Content-Type: application/json' -d '{"user_id":"demo-user","type":"weekly"}' >> $LOG_DIR/generate_weekly_report.log 2>&1
+

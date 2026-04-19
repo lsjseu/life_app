@@ -2,19 +2,23 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/load_life_app_config.sh"
+load_life_app_config "$SCRIPT_DIR"
+
 APP_DIR="${APP_DIR:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 
 APP_NAME="${APP_NAME:-life_app}"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/share/${APP_NAME}}"
 RUNTIME_DIR="${RUNTIME_DIR:-$HOME/.local/state/${APP_NAME}}"
-LOG_DIR="${LOG_DIR:-/deploy/log}"
+LOG_DIR="${LOG_DIR:-${LINUX_LOG_DIR:-$INSTALL_DIR/log}}"
 PID_DIR="${PID_DIR:-$RUNTIME_DIR/pids}"
 
 PYTHON_BIN="${PYTHON_BIN:-python3}"
-BACKEND_HOST="${BACKEND_HOST:-0.0.0.0}"
+BACKEND_HOST="${BACKEND_HOST:-${LINUX_BACKEND_HOST:-0.0.0.0}}"
 BACKEND_PORT="${BACKEND_PORT:-8000}"
 BACKEND_PID_FILE="${BACKEND_PID_FILE:-$PID_DIR/backend.pid}"
 BACKEND_LOG_FILE="${BACKEND_LOG_FILE:-$LOG_DIR/life_app_backend.log}"
+USE_SQLITE="${USE_SQLITE:-${LINUX_USE_SQLITE:-0}}"
 
 # Defaults follow SmartTrader's database account style.
 DB_TYPE="${DB_TYPE:-mysql}"
@@ -34,6 +38,7 @@ SQL_SCHEMA_FILE_RELATIVE="${SQL_SCHEMA_FILE_RELATIVE:-scripts/mysql_schema.sql}"
 
 FORCE_INSTALL="${FORCE_INSTALL:-0}"
 STARTUP_TIMEOUT="${STARTUP_TIMEOUT:-60}"
+apply_life_app_runtime_config
 
 log() {
   printf '\n[%s] %s\n' "$(date '+%F %T')" "$1"
@@ -76,6 +81,7 @@ sync_project() {
   rsync -a --delete \
     --exclude ".git" \
     --exclude ".DS_Store" \
+    --exclude "log" \
     --exclude "backend/.venv" \
     --exclude "backend/data" \
     --exclude "backend/app/__pycache__" \
@@ -247,7 +253,7 @@ PY
 }
 
 init_sqlite_when_needed() {
-  if [ "$DB_TYPE" = "mysql" ]; then
+  if [ "$DB_TYPE" != "sqlite" ]; then
     return
   fi
   log "初始化 SQLite 数据库"
@@ -320,4 +326,3 @@ main() {
 }
 
 main "$@"
-
