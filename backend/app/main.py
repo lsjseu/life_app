@@ -158,7 +158,7 @@ def send_record_message(payload: RecordMessageRequest) -> RecordMessageResponse:
     conversation_id = payload.conversation_id or str(uuid.uuid4())
     user_message = msg("user", payload.text or "发送了图片")
     pending = classify_record(payload.text, payload.images)
-    assistant_message = msg("assistant", confirmation_text(pending), ["对的", "不对", "补充"])
+    assistant_message = msg("assistant", confirmation_text(pending), ["保存记录", "重新填写", "补充"])
     return RecordMessageResponse(
         conversation_id=conversation_id,
         messages=[user_message, assistant_message],
@@ -171,7 +171,7 @@ def confirm_record(payload: ConfirmRecordRequest) -> RecordMessageResponse:
     if not payload.confirmed:
         return RecordMessageResponse(
             conversation_id=payload.conversation_id,
-            messages=[msg("assistant", "没关系，哪里不对？你可以直接补充或重新描述。", ["重新记录", "补充"])],
+            messages=[msg("assistant", "没关系，哪里不对？你可以直接补充或重新描述。", ["重新填写", "补充"])],
             pending_record=payload.pending_record,
         )
     pending = payload.pending_record
@@ -187,7 +187,7 @@ def confirm_record(payload: ConfirmRecordRequest) -> RecordMessageResponse:
     )
     return RecordMessageResponse(
         conversation_id=payload.conversation_id,
-        messages=[msg("user", "对的"), msg("assistant", content, ["继续记录", "完成"])],
+        messages=[msg("user", "保存记录"), msg("assistant", content, ["继续记录", "完成"])],
         pending_record=None,
     )
 
@@ -282,7 +282,7 @@ def list_reports(user_id: str = "demo-user") -> list[Report]:
     reports = [_row_to_report(row) for row in rows]
     if reports:
         return reports
-    return [create_report(user_id, "weekly")]
+    return [create_report(user_id, "daily")]
 
 
 @app.post("/api/v1/reports/generate", response_model=Report)
@@ -303,7 +303,12 @@ def create_report(user_id: str, report_type: str) -> Report:
     report_id = str(uuid.uuid4())
     start, end = period_for(report_type)
     payload = generate_report_payload(report_type, list_records(user_id=user_id, limit=200))
-    title = "来福健康周报" if report_type == "weekly" else "来福健康月报"
+    title_map = {
+        "daily": "来福健康日报",
+        "weekly": "来福健康周报",
+        "monthly": "来福健康月报",
+    }
+    title = title_map.get(report_type, "来福健康报告")
     with get_db() as db:
         db.execute(
             """

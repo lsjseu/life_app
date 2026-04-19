@@ -48,14 +48,7 @@ Page({
   onRecordSaved() {
     this.loadDashboard();
   },
-  goReport() {
-    wx.switchTab({ url: '/pages/report/report' });
-  },
-  goAdvisor() {
-    wx.switchTab({ url: '/pages/advisor/advisor' });
-  },
   goProfile() {
     wx.switchTab({ url: '/pages/profile/profile' });
   }
 });
-

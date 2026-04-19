@@ -344,9 +344,10 @@ def generate_report_payload(report_type: str, records: list[Record]) -> dict[str
     exercise_minutes = sum(r.duration for r in records if r.type == "exercise")
     health_count = len([r for r in records if r.type == "health"])
     score = min(98, 72 + len(records) * 2 + min(10, exercise_minutes // 30))
+    type_label = {"daily": "今日", "weekly": "本周", "monthly": "本月"}.get(report_type, "本周期")
     return {
         "score": float(score),
-        "summary": "本周期记录持续性良好，饮食、运动和健康指标已形成初步趋势。" if records else "本周期记录较少，建议先连续记录一周。",
+        "summary": f"{type_label}记录持续性良好，饮食、运动和健康指标已形成初步趋势。" if records else f"{type_label}记录较少，建议先从记录生活开始。",
         "sections": [
             {"title": "记录概览", "items": [f"共记录 {len(records)} 条", f"健康指标记录 {health_count} 条"]},
             {"title": "饮食分析", "items": [f"饮食摄入约 {calories_in} 千卡", "建议保证蔬菜和优质蛋白摄入"]},
@@ -361,6 +362,8 @@ def period_for(report_type: str) -> tuple[str, str]:
     today = date.today()
     if report_type == "monthly":
         start = today.replace(day=1)
+    elif report_type == "daily":
+        start = today
     else:
         start = today - timedelta(days=today.weekday())
     return start.isoformat(), today.isoformat()

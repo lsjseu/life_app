@@ -3,7 +3,7 @@
   <view class="panel">
     <view class="panel-header">
       <view>
-        <view class="title">统一记录</view>
+        <view class="title">记录生活</view>
         <view class="subtitle">饮食、运动、健康都可以自然表达</view>
       </view>
       <button class="close" bindtap="onClose">×</button>
@@ -42,12 +42,27 @@
       <image wx:for="{{selectedImages}}" wx:key="*this" src="{{item}}" mode="aspectFill"></image>
     </view>
 
-    <view class="input-bar">
-      <button class="icon-button" bindtouchstart="startVoice">🎙</button>
-      <button class="icon-button" bindtap="chooseImage">📷</button>
-      <input value="{{inputText}}" bindinput="onInput" confirm-type="send" bindconfirm="sendMessage" placeholder="打字告诉来福..." />
-      <button class="send" bindtap="sendMessage" disabled="{{isProcessing}}">发送</button>
+    <view class="input-bar" catchtap="noop">
+      <textarea
+        class="text-input"
+        value="{{inputText}}"
+        bindinput="onInput"
+        placeholder="打字告诉来福，比如：早餐吃了一个包子和一杯豆浆"
+        placeholder-class="input-placeholder"
+        adjust-position="{{true}}"
+        cursor-spacing="120"
+        hold-keyboard="{{true}}"
+        show-confirm-bar="{{false}}"
+        disable-default-padding="{{true}}"
+        maxlength="500"
+      ></textarea>
+      <view class="submit-button {{isProcessing ? 'disabled' : ''}}" bindtap="primaryAction">
+        {{pendingRecord ? '保存记录' : '提交记录'}}
+      </view>
+      <view class="input-actions">
+        <button class="icon-button" bindtap="startVoice">语音</button>
+        <button class="icon-button" bindtap="chooseImage">拍照</button>
+      </view>
     </view>
   </view>
 </view>
-

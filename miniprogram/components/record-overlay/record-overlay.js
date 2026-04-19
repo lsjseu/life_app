@@ -47,6 +47,7 @@ Component({
     onClose() {
       this.triggerEvent('close');
     },
+    noop() {},
     onInput(event) {
       this.setData({ inputText: event.detail.value });
     },
@@ -91,12 +92,24 @@ Component({
         });
       } catch (error) {
         this.setData({ isProcessing: false });
+        const message = error.message || String(error);
         wx.showModal({
-          title: '请求失败',
-          content: `无法连接来福服务：${error.message || error}\n请确认已重新预览，并且服务器 8000 端口可访问。`,
+          title: '提交失败',
+          content: `服务器接口当前可用，但小程序请求失败。\n\n错误：${message}\n\n如果看到 url not in domain list / request:fail，请在微信开发者工具「详情-本地设置」勾选“不校验合法域名、web-view、TLS版本以及HTTPS证书”，然后重新编译预览。`,
           showCancel: false
         });
       }
+    },
+    async primaryAction() {
+      if (this.data.isProcessing) return;
+      if (this.data.pendingRecord) {
+        await this.savePendingRecord();
+        return;
+      }
+      await this.sendMessage();
+    },
+    async savePendingRecord() {
+      await this.confirm(true);
     },
     async quickAction(event) {
       const action = event.currentTarget.dataset.action;
@@ -107,6 +120,14 @@ Component({
       }
       if (action === '继续记录') {
         this.setData({ inputText: '' });
+        return;
+      }
+      if (action === '保存记录' || action === '保存') {
+        await this.confirm(true);
+        return;
+      }
+      if (action === '重新填写') {
+        this.setData({ inputText: '', pendingRecord: null });
         return;
       }
       if (!this.data.pendingRecord) {
@@ -144,7 +165,12 @@ Component({
         }
       } catch (error) {
         this.setData({ isProcessing: false });
-        wx.showToast({ title: '保存失败', icon: 'none' });
+        const message = error.message || String(error);
+        wx.showModal({
+          title: '保存失败',
+          content: `服务器保存接口当前可用，但小程序请求失败。\n\n错误：${message}\n\n如果是 url not in domain list，请在微信开发者工具「详情-本地设置」勾选“不校验合法域名、web-view、TLS版本以及HTTPS证书”，再重新预览。`,
+          showCancel: false
+        });
       }
     }
   }

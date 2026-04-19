@@ -3,9 +3,15 @@ const { lifeApi } = require('../../api/life');
 Page({
   data: {
     reports: [],
-    activeType: 'weekly',
+    activeType: 'daily',
+    activeReports: [],
+    currentReport: null,
     loading: true,
-    generating: false
+    typeLabels: {
+      daily: '日报',
+      weekly: '周报',
+      monthly: '月报'
+    }
   },
   onShow() {
     this.loadReports();
@@ -13,25 +19,23 @@ Page({
   async loadReports() {
     try {
       const reports = await lifeApi.reports();
-      this.setData({ reports, loading: false });
+      this.updateReports(reports, this.data.activeType, false);
     } catch (error) {
       this.setData({ loading: false });
       wx.showToast({ title: '报告加载失败', icon: 'none' });
     }
   },
   switchType(event) {
-    this.setData({ activeType: event.currentTarget.dataset.type });
+    this.updateReports(this.data.reports, event.currentTarget.dataset.type, this.data.loading);
   },
-  async generateReport() {
-    this.setData({ generating: true });
-    try {
-      const report = await lifeApi.generateReport(this.data.activeType);
-      this.setData({ reports: [report, ...this.data.reports], generating: false });
-      wx.showToast({ title: '报告已生成', icon: 'success' });
-    } catch (error) {
-      this.setData({ generating: false });
-      wx.showToast({ title: '生成失败', icon: 'none' });
-    }
+  updateReports(reports, activeType, loading) {
+    const activeReports = reports.filter((item) => item.type === activeType);
+    this.setData({
+      reports,
+      activeType,
+      activeReports,
+      currentReport: activeReports[0] || null,
+      loading
+    });
   }
 });
-

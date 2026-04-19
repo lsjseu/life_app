@@ -16,9 +16,7 @@
     "minifyWXML": true,
     "localPlugins": false,
     "disableUseStrict": false,
-    "useCompilerPlugins": [
-      "typescript"
-    ],
+    "useCompilerPlugins": [],
     "condition": false,
     "swc": false,
     "disableSWC": true,

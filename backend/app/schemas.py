@@ -5,7 +5,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 RecordType = Literal["diet", "exercise", "health"]
-ReportType = Literal["weekly", "monthly"]
+ReportType = Literal["daily", "weekly", "monthly"]
 
 
 class Message(BaseModel):
@@ -121,7 +121,7 @@ class Report(BaseModel):
 
 class GenerateReportRequest(BaseModel):
     user_id: str = "demo-user"
-    type: ReportType = "weekly"
+    type: ReportType = "daily"
 
 
 class Dashboard(BaseModel):
@@ -131,4 +131,3 @@ class Dashboard(BaseModel):
     stats: dict[str, Any]
     recent_records: list[Record]
     latest_report: Report | None = None
-

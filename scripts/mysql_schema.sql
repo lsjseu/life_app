@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS consultations (
 CREATE TABLE IF NOT EXISTS reports (
     id VARCHAR(64) PRIMARY KEY,
     user_id VARCHAR(64) NOT NULL,
-    type VARCHAR(20) NOT NULL COMMENT 'weekly/monthly',
+    type VARCHAR(20) NOT NULL COMMENT 'daily/weekly/monthly',
     period_start DATE NOT NULL,
     period_end DATE NOT NULL,
     score DECIMAL(5,2) NOT NULL DEFAULT 0,
@@ -106,4 +106,3 @@ ON DUPLICATE KEY UPDATE
     weight = VALUES(weight),
     target_weight = VALUES(target_weight),
     activity_level = VALUES(activity_level);
-

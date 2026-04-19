@@ -34,14 +34,11 @@
 
   <button class="record-button" bindtap="openRecord">
     <view class="record-icon">＋</view>
-    <view>记录</view>
-    <view class="record-desc">说话、打字、拍照都可以</view>
+    <view class="record-copy">
+      <view class="record-title-main">记录生活</view>
+      <view class="record-desc">吃饭、运动、身体状态，都可以告诉来福</view>
+    </view>
   </button>
-
-  <view class="quick-row">
-    <button bindtap="goReport">查看报告</button>
-    <button bindtap="goAdvisor">问AI顾问</button>
-  </view>
 
   <view class="section-title">最近记录</view>
   <view wx:if="{{dashboard.recent_records.length}}" class="record-list">

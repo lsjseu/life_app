@@ -1,6 +1,6 @@
 # 来福后端
 
-FastAPI MVP 服务，使用 SQLite 存储数据，并用规则化服务模拟统一记录 Agent、DeerFlow 风格健康顾问 Agent 和报告生成 Agent。
+FastAPI MVP 服务，使用 SQLite 存储数据，并用规则化服务模拟记录生活 Agent、DeerFlow 风格健康顾问 Agent 和报告生成 Agent。
 
 ## 启动
 

@@ -5,25 +5,22 @@
   </view>
 
   <view class="type-switch card">
+    <button class="{{activeType === 'daily' ? 'active' : ''}}" data-type="daily" bindtap="switchType">日报</button>
     <button class="{{activeType === 'weekly' ? 'active' : ''}}" data-type="weekly" bindtap="switchType">周报</button>
     <button class="{{activeType === 'monthly' ? 'active' : ''}}" data-type="monthly" bindtap="switchType">月报</button>
   </view>
 
-  <button class="primary-button generate" bindtap="generateReport" loading="{{generating}}">
-    生成{{activeType === 'weekly' ? '周报' : '月报'}}
-  </button>
-
-  <view wx:if="{{reports.length}}" class="latest card">
+  <view wx:if="{{currentReport}}" class="latest card">
     <view class="latest-top">
       <view>
-        <view class="report-title">{{reports[0].title}}</view>
-        <view class="muted">{{reports[0].period_start}} 至 {{reports[0].period_end}}</view>
+        <view class="report-title">{{currentReport.title}}</view>
+        <view class="muted">{{currentReport.period_start}} 至 {{currentReport.period_end}}</view>
       </view>
-      <view class="score">{{reports[0].score}}</view>
+      <view class="score">{{currentReport.score}}</view>
     </view>
-    <view class="summary">{{reports[0].summary}}</view>
+    <view class="summary">{{currentReport.summary}}</view>
     <view class="sections">
-      <view wx:for="{{reports[0].content.sections}}" wx:key="title" class="section">
+      <view wx:for="{{currentReport.content.sections}}" wx:key="title" class="section">
         <view class="section-name">{{item.title}}</view>
         <view wx:for="{{item.items}}" wx:for-item="line" wx:key="*this" class="section-line">• {{line}}</view>
       </view>
@@ -32,7 +29,7 @@
 
   <view class="section-title">历史报告</view>
   <view class="history">
-    <view wx:for="{{reports}}" wx:key="id" class="history-item card">
+    <view wx:for="{{activeReports}}" wx:key="id" class="history-item card">
       <view>
         <view class="history-title">{{item.title}}</view>
         <view class="muted">{{item.created_at}}</view>
@@ -41,9 +38,8 @@
     </view>
   </view>
 
-  <view wx:if="{{!reports.length && !loading}}" class="empty card">
-    <view>还没有健康报告</view>
-    <view class="muted">点击上方按钮生成第一份报告</view>
+  <view wx:if="{{!currentReport && !loading}}" class="empty card">
+    <view>还没有{{typeLabels[activeType]}}</view>
+    <view class="muted">报告会由后台每天自动生成</view>
   </view>
 </view>
-

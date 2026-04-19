@@ -14,6 +14,11 @@ LOG_DIR=$APP_DIR/log/cron
 # 每天 02:20 主动调用一次首页接口，确认后端服务和数据库读链路可用。
 20 2 * * * cd $APP_DIR && mkdir -p $LOG_DIR && curl -fsS http://127.0.0.1:8000/api/v1/home/dashboard >> $LOG_DIR/health_check.log 2>&1
 
-# 每天 02:30 生成 demo 用户周报，便于验证报告链路。
-30 2 * * * cd $APP_DIR && mkdir -p $LOG_DIR && curl -fsS -X POST http://127.0.0.1:8000/api/v1/reports/generate -H 'Content-Type: application/json' -d '{"user_id":"demo-user","type":"weekly"}' >> $LOG_DIR/generate_weekly_report.log 2>&1
+# 每天 02:30 生成 demo 用户日报，便于验证报告链路。
+30 2 * * * cd $APP_DIR && mkdir -p $LOG_DIR && curl -fsS -X POST http://127.0.0.1:8000/api/v1/reports/generate -H 'Content-Type: application/json' -d '{"user_id":"demo-user","type":"daily"}' >> $LOG_DIR/generate_daily_report.log 2>&1
 
+# 每周一 02:40 生成 demo 用户周报。
+40 2 * * 1 cd $APP_DIR && mkdir -p $LOG_DIR && curl -fsS -X POST http://127.0.0.1:8000/api/v1/reports/generate -H 'Content-Type: application/json' -d '{"user_id":"demo-user","type":"weekly"}' >> $LOG_DIR/generate_weekly_report.log 2>&1
+
+# 每月 1 日 02:50 生成 demo 用户月报。
+50 2 1 * * cd $APP_DIR && mkdir -p $LOG_DIR && curl -fsS -X POST http://127.0.0.1:8000/api/v1/reports/generate -H 'Content-Type: application/json' -d '{"user_id":"demo-user","type":"monthly"}' >> $LOG_DIR/generate_monthly_report.log 2>&1

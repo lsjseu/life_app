@@ -598,7 +598,7 @@ function RecordModal({ visible, onClose, onSaved }: { visible: boolean; onClose:
         <View style={styles.modalPanel}>
           <View style={styles.modalHeader}>
             <View>
-              <Text style={styles.modalTitle}>统一记录</Text>
+              <Text style={styles.modalTitle}>记录生活</Text>
               <Text style={styles.mutedText}>饮食、运动、健康都可以自然表达</Text>
             </View>
             <Pressable style={styles.closeButton} onPress={onClose}>
