@@ -25,6 +25,7 @@ apply_life_app_runtime_config() {
   export DEEP_THINK_LLM="${DEEP_THINK_LLM:-deepseek-reasoner}"
   export QUICK_THINK_LLM="${QUICK_THINK_LLM:-deepseek-chat}"
   export LLM_BACKEND_URL="${LLM_BACKEND_URL:-https://api.deepseek.com/v1}"
+  export LLM_API_KEY="${LLM_API_KEY:-}"
 
   case "$LLM_PROVIDER" in
     deepseek)
