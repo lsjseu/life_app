@@ -1,6 +1,6 @@
 # 来福后端
 
-FastAPI MVP 服务，使用 SQLite 存储数据，并用规则化服务模拟统一记录 Agent、健康顾问 Agent 和报告生成 Agent。
+FastAPI MVP 服务，使用 SQLite 存储数据，并用规则化服务模拟统一记录 Agent、DeerFlow 风格健康顾问 Agent 和报告生成 Agent。
 
 ## 启动
 
@@ -31,3 +31,18 @@ python -m app.seed
 - `GET /api/v1/profile`
 - `PUT /api/v1/profile`
 
+## 健康咨询 Agent
+
+顾问接口已接入轻量 DeerFlow 架构，入口仍是：
+
+```bash
+POST /api/v1/advisor/message
+```
+
+当前节点包括 Coordinator、Planner、SafetyTriage、ProfileResearcher、RecordResearcher、HealthCoach 和 Reporter。实现文件：
+
+- `app/agents/deerflow_health.py`
+
+架构说明见：
+
+- `../docs/来福健康咨询Agent_DeerFlow架构方案.md`

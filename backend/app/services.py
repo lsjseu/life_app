@@ -5,6 +5,7 @@ import uuid
 from datetime import date, datetime, timedelta
 from typing import Any
 
+from .agents.deerflow_health import DeerFlowHealthAgent, HealthAgentResult
 from .database import dumps, get_db, loads
 from .schemas import Message, Record
 
@@ -285,6 +286,34 @@ def list_records(user_id: str = "demo-user", record_type: str | None = None, lim
     return [row_to_record(row) for row in rows]
 
 
+def get_profile_snapshot(user_id: str = "demo-user") -> dict[str, Any]:
+    with get_db() as db:
+        row = db.execute("SELECT * FROM profiles WHERE user_id = ?", (user_id,)).fetchone()
+    if row is None:
+        return {}
+    return {
+        "gender": row["gender"],
+        "age": row["age"],
+        "height": row["height"],
+        "weight": row["weight"],
+        "target_weight": row["target_weight"],
+        "activity_level": row["activity_level"],
+        "allergies": loads(row["allergies"], []),
+        "family_history": loads(row["family_history"], []),
+        "health_goals": loads(row["health_goals"], []),
+    }
+
+
+def advisor_agent_reply(user_id: str, text: str, records: list[Record] | None = None) -> HealthAgentResult:
+    agent = DeerFlowHealthAgent()
+    return agent.run(
+        user_id=user_id,
+        question=text,
+        profile=get_profile_snapshot(user_id),
+        records=records if records is not None else list_records(user_id, limit=20),
+    )
+
+
 def advisor_reply(text: str, records: list[Record]) -> str:
     if "血糖" in text:
         return "血糖偏高时，建议优先控制精制碳水和含糖饮料，主食选择全谷物，并保持规律运动。若连续多次异常，请及时咨询医生。"
@@ -323,4 +352,3 @@ def period_for(report_type: str) -> tuple[str, str]:
     else:
         start = today - timedelta(days=today.weekday())
     return start.isoformat(), today.isoformat()
-

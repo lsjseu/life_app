@@ -1,10 +1,6 @@
-import { API_BASE_URL } from '../constants/config';
+const { API_BASE_URL } = require('../constants/config');
 
-export function request<T>(options: {
-  url: string;
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  data?: unknown;
-}): Promise<T> {
+function request(options) {
   return new Promise((resolve, reject) => {
     wx.request({
       url: `${API_BASE_URL}${options.url}`,
@@ -16,10 +12,12 @@ export function request<T>(options: {
       },
       success: (res) => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve(res.data as T);
+          resolve(res.data);
         } else {
-          const data = res.data as { detail?: string; message?: string } | undefined;
-          reject(new Error(data?.detail || data?.message || `HTTP ${res.statusCode}`));
+          const message = res.data && (res.data.detail || res.data.message)
+            ? `${res.data.detail || res.data.message}`
+            : `HTTP ${res.statusCode}`;
+          reject(new Error(message));
         }
       },
       fail: (error) => {
@@ -28,3 +26,7 @@ export function request<T>(options: {
     });
   });
 }
+
+module.exports = {
+  request
+};

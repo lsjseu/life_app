@@ -22,7 +22,7 @@ from .schemas import (
     StartConversationResponse,
 )
 from .services import (
-    advisor_reply,
+    advisor_agent_reply,
     classify_record,
     confirmation_text,
     generate_report_payload,
@@ -224,7 +224,8 @@ def send_advisor_message(payload: AdvisorMessageRequest) -> AdvisorMessageRespon
         row = db.execute("SELECT * FROM consultations WHERE id = ?", (session_id,)).fetchone()
     messages = loads(row["messages"], []) if row else []
     user_message = msg("user", payload.text)
-    assistant_message = msg("assistant", advisor_reply(payload.text, list_records(payload.user_id, limit=20)))
+    agent_result = advisor_agent_reply(payload.user_id, payload.text, list_records(payload.user_id, limit=20))
+    assistant_message = msg("assistant", agent_result.content, agent_result.quick_actions)
     messages.extend([user_message.model_dump(), assistant_message.model_dump()])
     summary = payload.text[:40] or "健康咨询"
     with get_db() as db:
@@ -342,4 +343,3 @@ def _row_to_report(row) -> Report:
         content=loads(row["content"], {}),
         created_at=row["created_at"],
     )
-

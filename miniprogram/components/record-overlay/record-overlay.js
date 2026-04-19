@@ -1,5 +1,4 @@
-import { lifeApi } from '../../api/life';
-import type { LifeMessage } from '../../types/life';
+const { lifeApi } = require('../../api/life');
 
 Component({
   properties: {
@@ -10,14 +9,14 @@ Component({
   },
   data: {
     conversationId: '',
-    messages: [] as LifeMessage[],
+    messages: [],
     inputText: '',
-    selectedImages: [] as string[],
-    pendingRecord: null as Record<string, any> | null,
+    selectedImages: [],
+    pendingRecord: null,
     isProcessing: false
   },
   observers: {
-    visible(visible: boolean) {
+    visible(visible) {
       if (visible && !this.data.conversationId) {
         this.initConversation();
       }
@@ -48,11 +47,11 @@ Component({
     onClose() {
       this.triggerEvent('close');
     },
-    onInput(event: any) {
+    onInput(event) {
       this.setData({ inputText: event.detail.value });
     },
-    useTip(event: any) {
-      const text = event.currentTarget.dataset.text as string;
+    useTip(event) {
+      const text = event.currentTarget.dataset.text;
       this.setData({ inputText: text });
     },
     async chooseImage() {
@@ -92,16 +91,15 @@ Component({
         });
       } catch (error) {
         this.setData({ isProcessing: false });
-        const message = error instanceof Error ? error.message : String(error);
         wx.showModal({
           title: '请求失败',
-          content: `无法连接来福服务：${message}\n请确认已重新预览，并且服务器 8000 端口可访问。`,
+          content: `无法连接来福服务：${error.message || error}\n请确认已重新预览，并且服务器 8000 端口可访问。`,
           showCancel: false
         });
       }
     },
-    async quickAction(event: any) {
-      const action = event.currentTarget.dataset.action as string;
+    async quickAction(event) {
+      const action = event.currentTarget.dataset.action;
       if (action === '完成') {
         this.triggerEvent('saved');
         this.onClose();
@@ -127,7 +125,7 @@ Component({
         this.setData({ inputText: '补充：' });
       }
     },
-    async confirm(confirmed: boolean) {
+    async confirm(confirmed) {
       if (!this.data.pendingRecord) return;
       this.setData({ isProcessing: true });
       try {

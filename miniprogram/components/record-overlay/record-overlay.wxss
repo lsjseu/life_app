@@ -15,7 +15,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 82vh;
+  height: 86vh;
   border-radius: 32rpx 32rpx 0 0;
   background: #f5f5f5;
   box-shadow: 0 -12rpx 32rpx rgba(0, 0, 0, 0.16);
@@ -53,7 +53,7 @@
 }
 
 .messages {
-  height: calc(82vh - 270rpx);
+  height: calc(86vh - 340rpx - env(safe-area-inset-bottom));
   padding: 28rpx 32rpx;
   box-sizing: border-box;
 }
@@ -159,39 +159,45 @@
 }
 
 .input-bar {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 12rpx;
-  padding: 16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
+  min-height: 120rpx;
+  padding: 16rpx 24rpx calc(42rpx + env(safe-area-inset-bottom));
   background: #ffffff;
+  box-sizing: border-box;
 }
 
 .icon-button {
-  width: 72rpx;
-  height: 72rpx;
+  width: 80rpx;
+  height: 80rpx;
   padding: 0;
-  border-radius: 50%;
+  border-radius: 40rpx;
   background: #4caf50;
   color: #ffffff;
-  line-height: 72rpx;
+  line-height: 80rpx;
+  flex-shrink: 0;
 }
 
 .input-bar input {
   flex: 1;
-  height: 72rpx;
+  height: 80rpx;
+  min-width: 0;
   padding: 0 24rpx;
-  border-radius: 36rpx;
+  border-radius: 40rpx;
   background: #f5f5f5;
   font-size: 28rpx;
 }
 
 .send {
-  width: 104rpx;
-  height: 72rpx;
+  width: 120rpx;
+  height: 80rpx;
   padding: 0;
-  border-radius: 36rpx;
+  border-radius: 40rpx;
   background: #4caf50;
   color: #ffffff;
-  line-height: 72rpx;
+  line-height: 80rpx;
+  flex-shrink: 0;
 }
-

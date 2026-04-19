@@ -9,9 +9,12 @@
 }
 
 .switch button {
+  min-height: 68rpx;
   border-radius: 12rpx;
   background: transparent;
   color: #757575;
+  font-size: 26rpx;
+  line-height: 68rpx;
 }
 
 .switch button.active {
@@ -76,6 +79,7 @@
   margin: 0;
   color: #388e3c;
   background: #e8f5e9;
+  font-size: 24rpx;
 }
 
 .time {
@@ -91,23 +95,38 @@
 
 .input-bar {
   display: flex;
+  align-items: center;
   gap: 12rpx;
-  padding: 16rpx 0;
+  padding: 16rpx 0 calc(18rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
 }
 
 .input-bar input {
   flex: 1;
-  height: 80rpx;
+  min-width: 0;
+  height: 76rpx;
   padding: 0 24rpx;
-  border-radius: 40rpx;
+  border-radius: 8rpx;
   background: #ffffff;
+  box-sizing: border-box;
+  font-size: 28rpx;
 }
 
 .input-bar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   width: 112rpx;
-  border-radius: 40rpx;
+  height: 72rpx;
+  margin: 0;
+  padding: 0;
+  border-radius: 8rpx;
   background: #4caf50;
   color: #ffffff;
+  font-size: 24rpx;
+  line-height: 1;
+  box-sizing: border-box;
 }
 
 .history {
@@ -131,4 +150,3 @@
   color: #757575;
   text-align: center;
 }
-

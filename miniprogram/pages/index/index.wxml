@@ -56,9 +56,7 @@
   </view>
   <view wx:else class="empty card">
     <view>还没有记录</view>
-    <button bindtap="openRecord">开始记录</button>
   </view>
 </view>
 
 <record-overlay visible="{{recordVisible}}" bind:close="closeRecord" bind:saved="onRecordSaved" />
-
