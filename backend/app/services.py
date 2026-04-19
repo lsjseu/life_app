@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta
 from typing import Any
 
 from .agents.deerflow_health import DeerFlowHealthAgent, HealthAgentResult
+from .agents.llm_client import DeepSeekClient
 from .database import dumps, get_db, loads
 from .schemas import Message, Record
 
@@ -312,6 +313,17 @@ def advisor_agent_reply(user_id: str, text: str, records: list[Record] | None = 
         profile=get_profile_snapshot(user_id),
         records=records if records is not None else list_records(user_id, limit=20),
     )
+
+
+def advisor_llm_status() -> dict[str, Any]:
+    client = DeepSeekClient()
+    return {
+        "provider": client.provider,
+        "model": client.model,
+        "base_url": client.base_url,
+        "enabled": client.enabled,
+        "api_key_configured": bool(client.api_key),
+    }
 
 
 def advisor_reply(text: str, records: list[Record]) -> str:

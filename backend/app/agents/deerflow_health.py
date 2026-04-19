@@ -6,6 +6,7 @@ from statistics import mean
 from typing import Any, Literal
 
 from ..schemas import Record
+from .llm_client import DeepSeekClient, LLMClientError
 
 Intent = Literal[
     "blood_pressure",
@@ -25,6 +26,8 @@ class HealthAgentResult:
     quick_actions: list[str] = field(default_factory=list)
     trace: list[str] = field(default_factory=list)
     risk_level: Literal["normal", "attention", "urgent"] = "normal"
+    llm_used: bool = False
+    llm_model: str | None = None
 
 
 @dataclass
@@ -41,6 +44,8 @@ class HealthAgentState:
     trace: list[str] = field(default_factory=list)
     risk_level: Literal["normal", "attention", "urgent"] = "normal"
     urgent_reason: str | None = None
+    llm_used: bool = False
+    llm_model: str | None = None
 
 
 class DeerFlowHealthAgent:
@@ -60,6 +65,7 @@ class DeerFlowHealthAgent:
             self._research_profile(state)
             self._research_records(state)
             self._coach(state)
+            self._llm_refine(state)
         return self._report(state)
 
     def _coordinate(self, state: HealthAgentState) -> None:
@@ -220,6 +226,52 @@ class DeerFlowHealthAgent:
             ]
             state.quick_actions = ["记录健康指标", "问饮食建议", "生成周报"]
 
+    def _llm_refine(self, state: HealthAgentState) -> None:
+        state.trace.append("LLMReporter: 尝试调用 DeepSeek 生成自然语言回复")
+        client = DeepSeekClient()
+        if not client.enabled:
+            state.trace.append("LLMReporter: DeepSeek 未配置，使用本地规则回复")
+            return
+
+        messages = [
+            {
+                "role": "system",
+                "content": (
+                    "你是来福APP的健康咨询Agent，使用中文回答。"
+                    "你只能提供健康管理建议，不能替代医生诊断，不能开处方，不能建议用户自行调整药物。"
+                    "如果存在明显急症风险，应建议及时就医。"
+                    "请输出严格JSON对象，字段为 content 和 quick_actions。"
+                    "content 要自然、具体、简洁，包含必要的安全提醒。"
+                    "quick_actions 是3个以内短按钮文案。"
+                ),
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"用户问题：{state.question}\n"
+                    f"识别意图：{state.intent}\n"
+                    f"风险等级：{state.risk_level}\n"
+                    f"用户档案：{state.profile}\n"
+                    f"Agent执行计划：{state.plan}\n"
+                    f"参考信息：{state.findings}\n"
+                    f"本地建议草稿：{state.recommendations}\n"
+                    "请基于以上上下文生成最终健康顾问回复。"
+                ),
+            },
+        ]
+        try:
+            response = client.chat_json(messages)
+        except LLMClientError as exc:
+            state.trace.append(f"LLMReporter: DeepSeek 调用失败，回退本地规则回复：{exc}")
+            return
+
+        if response.content:
+            state.recommendations = [response.content]
+            state.quick_actions = response.quick_actions or state.quick_actions
+            state.llm_used = True
+            state.llm_model = response.model
+            state.trace.append(f"LLMReporter: DeepSeek 已生效，model={response.model}")
+
     def _report(self, state: HealthAgentState) -> HealthAgentResult:
         state.trace.append("Reporter: 汇总为用户可读的咨询回复")
         if state.risk_level == "urgent":
@@ -233,6 +285,16 @@ class DeerFlowHealthAgent:
                 quick_actions=["整理就医信息", "记录当前症状"],
                 trace=state.trace,
                 risk_level=state.risk_level,
+            )
+
+        if state.llm_used and state.recommendations:
+            return HealthAgentResult(
+                content=state.recommendations[0],
+                quick_actions=state.quick_actions,
+                trace=state.trace,
+                risk_level=state.risk_level,
+                llm_used=True,
+                llm_model=state.llm_model,
             )
 
         sections = ["我按健康顾问流程帮你看了一下："]
@@ -264,4 +326,3 @@ def _metric_values(records: list[Record], key: str) -> list[float]:
         if isinstance(value, int | float):
             values.append(float(value))
     return values
-

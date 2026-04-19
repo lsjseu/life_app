@@ -23,6 +23,7 @@ from .schemas import (
 )
 from .services import (
     advisor_agent_reply,
+    advisor_llm_status,
     classify_record,
     confirmation_text,
     generate_report_payload,
@@ -244,6 +245,11 @@ def send_advisor_message(payload: AdvisorMessageRequest) -> AdvisorMessageRespon
         session_id=session_id,
         messages=[user_message, assistant_message],
     )
+
+
+@app.get("/api/v1/advisor/llm/status")
+def get_advisor_llm_status() -> dict[str, object]:
+    return advisor_llm_status()
 
 
 @app.get("/api/v1/advisor/sessions", response_model=list[Consultation])
